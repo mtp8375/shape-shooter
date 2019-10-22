@@ -5,6 +5,7 @@
 #include "Transform.h"
 #include "MaterialComponent.h"
 #include "DebugMovement.h"
+#include "MovementComponent.h"
 #include "World.h"
 #include "Rotator.h"
 
@@ -109,7 +110,9 @@ void Game::CreateEntities()
 	CameraComponent* cc = camera->AddComponent<CameraComponent>();
 	cc->UpdateProjectionMatrix((float)width / height);
 	camera->GetTransform()->SetPosition(XMFLOAT3(0, 0, -5));
-	camera->AddComponent<DebugMovement>();
+	MovementComponent* mc = camera->AddComponent<MovementComponent>();
+	mc->SetSpeed(1.2f);
+	mc->SetSensitivity(0.002f);
 	world->m_mainCamera = cc;
 
 	Entity* dirLight = world->Instantiate("DirLight1");
