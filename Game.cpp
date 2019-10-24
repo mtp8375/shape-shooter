@@ -111,8 +111,8 @@ void Game::CreateEntities()
 	cc->UpdateProjectionMatrix((float)width / height);
 	camera->GetTransform()->SetPosition(XMFLOAT3(0, 0, -5));
 	MovementComponent* mc = camera->AddComponent<MovementComponent>();
-	mc->SetSpeed(1.2f);
-	mc->SetSensitivity(0.002f);
+	mc->SetSpeed(1.2f); // ** SET SPEED FOR MOVEMENT HERE **
+	mc->SetSensitivity(0.002f); // ** SET SENSITIVITY OF CAMERA HERE **
 	world->m_mainCamera = cc;
 
 	Entity* dirLight = world->Instantiate("DirLight1");

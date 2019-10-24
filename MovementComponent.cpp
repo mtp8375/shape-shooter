@@ -21,8 +21,10 @@ void MovementComponent::Tick(float deltaTime)
 	XMVECTOR position = XMLoadFloat3(&posData);
 	XMVECTOR g_forward = XMLoadFloat3(&fwdData);
 	XMVECTOR g_right = XMLoadFloat3(&rightData);
-	XMVECTOR translation = XMVectorSet(0, 0, 0, 0); //Represents a translation
+	XMVECTOR translation = XMVectorSet(0, 0, 0, 0); //Stores the total amount the camera is moving this frame
 
+
+	//Apply our given transformations
 	if (GetAsyncKeyState('W') & 0x8000)
 	{
 		translation += g_forward;
@@ -40,15 +42,16 @@ void MovementComponent::Tick(float deltaTime)
 		translation -= g_right;
 	}
 
+	//Multiple by deltaTime to scale it to a reasonable amount
 	translation = XMVector3Normalize(translation);
 	translation *= deltaTime;
-	translation *= m_speed;
+	translation *= m_speed; //Multiply that by our speed (<1 for decent not terrible speedy movement)
 
-	XMVECTOR newPos = translation + position;
+	XMVECTOR newPos = translation + position; //Add it to the camera's position
 
 	XMFLOAT3 newPosData;
 	XMStoreFloat3(&newPosData, newPos);
-	transform->SetPosition(newPosData);
+	transform->SetPosition(newPosData); //Apply the change to the camera
 }
 
 void MovementComponent::OnMouseMove(WPARAM buttonState, int x, int y)
@@ -57,9 +60,9 @@ void MovementComponent::OnMouseMove(WPARAM buttonState, int x, int y)
 	int dy = y - prevMousePos.y;
 
 	XMFLOAT4 rotDeltaData;
-	XMVECTOR rotDelta = XMQuaternionRotationRollPitchYaw(dy * m_sensitivity, dx * m_sensitivity, 0.0f);
+	XMVECTOR rotDelta = XMQuaternionRotationRollPitchYaw(dy * m_sensitivity, dx * m_sensitivity, 0.0f); //Multiply difference by sensitivity, store in a quaternion
 	XMStoreFloat4(&rotDeltaData, rotDelta);
-	GetOwner()->GetTransform()->Rotate(rotDeltaData);
+	GetOwner()->GetTransform()->Rotate(rotDeltaData); //Apply our new rotation to the camera
 
 	prevMousePos.x = x;
 	prevMousePos.y = y;
