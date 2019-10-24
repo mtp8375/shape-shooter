@@ -45,7 +45,7 @@ void MovementComponent::Tick(float deltaTime)
 	//Multiple by deltaTime to scale it to a reasonable amount
 	translation = XMVector3Normalize(translation);
 	translation *= deltaTime;
-	translation *= m_speed; //Multiply that by our speed (<1 for decent not terrible speedy movement)
+	translation *= m_speed; //Multiply that by our speed (1 < speed < 2 for decent not terrible speedy movement)
 
 	XMVECTOR newPos = translation + position; //Add it to the camera's position
 
