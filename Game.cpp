@@ -7,6 +7,7 @@
 #include "DebugMovement.h"
 #include "World.h"
 #include "Rotator.h"
+#include "ShapeSpawnerManager.h"
 
 // For the DirectX Math library
 using namespace DirectX;
@@ -70,6 +71,11 @@ void Game::LoadResources()
 
 	// Meshes
 	world->CreateMesh("cube", "Assets/Models/cube.obj", device);
+	world->CreateMesh("cone", "Assets/Models/cone.obj", device);
+	world->CreateMesh("cylinder", "Assets/Models/cylinder.obj", device);
+	world->CreateMesh("helix", "Assets/Models/helix.obj", device);
+	world->CreateMesh("sphere", "Assets/Models/sphere.obj", device);
+	world->CreateMesh("torus", "Assets/Models/torus.obj", device);
 
 	// Shaders
 	SimpleVertexShader* vs = world->CreateVertexShader("vs", device, context, L"VertexShader.cso");
@@ -101,9 +107,12 @@ void Game::CreateEntities()
 	cube1->GetTransform()->SetPosition(XMFLOAT3(0, 0, 0));
 	cube1->AddComponent<MeshComponent>()->m_mesh = world->GetMesh("cube");
 	cube1->AddComponent<MaterialComponent>()->m_material = world->GetMaterial("metal");
-	Rotator* rot = cube1->AddComponent<Rotator>();
-	rot->eulerDelta.x = 1.0f;
-	rot->eulerDelta.y = 1.0f;
+	Rotator* rotCube = cube1->AddComponent<Rotator>();
+	rotCube->eulerDelta.x = 1.0f;
+	rotCube->eulerDelta.y = 1.0f;
+
+	Entity* ShapeSpawnManager = world->Instantiate("ShapeSpawnManager");
+	ShapeSpawnerManagerComponent* ss = ShapeSpawnManager->AddComponent<ShapeSpawnerManagerComponent>();
 
 	Entity* camera = world->Instantiate("Cam");
 	CameraComponent* cc = camera->AddComponent<CameraComponent>();
@@ -153,6 +162,7 @@ void Game::OnResize()
 // --------------------------------------------------------
 void Game::Update(float deltaTime, float totalTime)
 {
+	
 	// Quit if the escape key is pressed
 	if (GetAsyncKeyState(VK_ESCAPE))
 		Quit();
